@@ -73,9 +73,56 @@ export default function DashboardLayout({
     }
 
     return (
-        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-brand-500/20">
+        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-brand-500/20 relative">
+            {/* === PREMIUM BACKGROUND EFFECTS (fffuel.co inspired) === */}
+            {/* Dot grid overlay */}
+            <div
+                className="fixed inset-0 pointer-events-none z-0"
+                style={{
+                    backgroundImage: 'radial-gradient(circle, #d4d4d8 1px, transparent 1px)',
+                    backgroundSize: '24px 24px',
+                    opacity: 0.4,
+                }}
+            />
+            {/* Top spotlight glow */}
+            <div
+                className="fixed top-0 left-0 right-0 h-[600px] pointer-events-none z-0"
+                style={{
+                    background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.07) 0%, transparent 70%)',
+                }}
+            />
+            {/* Floating gradient orb - top right */}
+            <div
+                className="fixed top-[-100px] right-[-50px] w-[500px] h-[500px] rounded-full pointer-events-none z-0"
+                style={{
+                    background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, rgba(99,102,241,0.03) 40%, transparent 70%)',
+                    filter: 'blur(40px)',
+                    animation: 'orbFloat 20s ease-in-out infinite',
+                }}
+            />
+            {/* Floating gradient orb - bottom left */}
+            <div
+                className="fixed bottom-[-80px] left-[-40px] w-[400px] h-[400px] rounded-full pointer-events-none z-0"
+                style={{
+                    background: 'radial-gradient(circle, rgba(168,85,247,0.08) 0%, rgba(99,102,241,0.03) 40%, transparent 70%)',
+                    filter: 'blur(30px)',
+                    animation: 'orbFloat 25s ease-in-out infinite reverse',
+                }}
+            />
+            {/* Noise grain texture */}
+            <div
+                className="fixed inset-0 pointer-events-none z-[1]"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                    backgroundSize: '200px 200px',
+                    opacity: 0.03,
+                    mixBlendMode: 'overlay' as const,
+                }}
+            />
+            {/* === END BACKGROUND EFFECTS === */}
+
             {/* Desktop Sidebar - Minimalist & Seamless */}
-            <aside className="hidden lg:flex flex-col w-[240px] fixed left-0 top-0 bottom-0 z-30 bg-background/50 backdrop-blur-xl border-r border-border">
+            <aside className="hidden lg:flex flex-col w-[240px] fixed left-0 top-0 bottom-0 z-30 backdrop-blur-xl border-r border-border" style={{ background: 'linear-gradient(180deg, var(--background) 0%, var(--surface-hover) 100%)' }}>
                 {/* Logo Area */}
                 <div className="h-14 flex items-center px-6 border-b border-border/50">
                     <Link href="/" className="flex items-center gap-2.5">
@@ -197,7 +244,7 @@ export default function DashboardLayout({
             )}
 
             {/* Main Content Area */}
-            <div className="lg:pl-[240px]">
+            <div className="lg:pl-[240px] relative z-2">
                 {/* Desktop Topbar - Minimal */}
                 <header className="hidden lg:flex h-14 bg-background/50 backdrop-blur-xl border-b border-border items-center justify-between px-8 sticky top-0 z-20">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">

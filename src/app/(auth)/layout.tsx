@@ -9,12 +9,14 @@ export default function AuthLayout({
     return (
         <div className="min-h-screen flex">
             {/* Left side - Branding */}
-            <div className="hidden lg:flex lg:w-1/2 gradient-primary relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-600/90 to-primary-800/90" />
-
-                {/* Decorative elements */}
-                <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+            <div
+                className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #4338ca 0%, #6366f1 30%, #818cf8 60%, #4f46e5 100%)' }}
+            >
+                {/* Animated floating orbs */}
+                <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse-soft" />
+                <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" style={{ animation: 'orbFloat 20s ease-in-out infinite' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-2xl" style={{ animation: 'orbFloat 15s ease-in-out infinite reverse' }} />
 
                 <div className="relative z-10 flex flex-col justify-between p-12 text-white">
                     <Link href="/" className="flex items-center gap-3">
