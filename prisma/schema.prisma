@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ProjectRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id       String  @id @default(cuid())
+  name     String
+  email    String  @unique
+  password String
+  avatar   String?
+  role     Role    @default(MEMBER)
+
+  assignedTasks Task[]          @relation("TaskAssignee")
+  createdTasks  Task[]          @relation("TaskCreator")
+  projects      ProjectMember[]
+  comments      Comment[]
+
+  // Follow relations
+  followers Follow[] @relation("Following")
+  following Follow[] @relation("Follower")
+
+  // Message relations
+  conversations ConversationParticipant[]
+  messages      Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  color       String  @default("#6366f1")
+
+  members ProjectMember[]
+  tasks   Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectMember {
+  id   String      @id @default(cuid())
+  role ProjectRole @default(MEMBER)
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  joinedAt DateTime @default(now())
+
+  @@unique([projectId, userId])
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+  assignee   User?     @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  assigneeId String?
+  creator    User      @relation("TaskCreator", fields: [creatorId], references: [id])
+  creatorId  String
+  comments   Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([assigneeId])
+  @@index([status])
+}
+
+model Comment {
+  id      String @id @default(cuid())
+  content String
+
+  task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId   String
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  createdAt DateTime @default(now())
+}
+
+// ============================================================================
+// Follow System (for Mentors page)
+// ============================================================================
+
+model Follow {
+  id String @id @default(cuid())
+
+  follower    User   @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId  String
+  following   User   @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+// ============================================================================
+// Messaging System
+// ============================================================================
+
+model Conversation {
+  id String @id @default(cuid())
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ConversationParticipant {
+  id String @id @default(cuid())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+
+  lastReadAt DateTime?
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id      String @id @default(cuid())
+  content String
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  sender         User         @relation(fields: [senderId], references: [id])
+  senderId       String
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId])
+  @@index([senderId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+}

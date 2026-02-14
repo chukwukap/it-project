@@ -1,26 +1,347 @@
 @import "tailwindcss";
 
+/* Custom variant for class-based dark mode toggling */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   COSMOS THEME - High-End Professional Aesthetic
+   Inspired by Linear, Vercel, and Raycast.
+   Focused on deep monochrome (Obsidian), precise borders, and refined typography.
+   ========================================================================== */
+
+@theme {
+  /* Custom fonts */
+  --font-sans:
+    "Inter", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+
+  /* ==========================================================================
+     BRAND - Refined Indigo (Professional, Deep)
+     Used sparingly for focus states and key actions.
+     ========================================================================== */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1; /* Indigo-500 */
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  /* Alias brand to primary to maintain compatibility */
+  --color-primary-50: var(--color-brand-50);
+  --color-primary-100: var(--color-brand-100);
+  --color-primary-200: var(--color-brand-200);
+  --color-primary-300: var(--color-brand-300);
+  --color-primary-400: var(--color-brand-400);
+  --color-primary-500: var(--color-brand-500);
+  --color-primary-600: var(--color-brand-600);
+  --color-primary-700: var(--color-brand-700);
+  --color-primary-800: var(--color-brand-800);
+  --color-primary-900: var(--color-brand-900);
+
+  /* ==========================================================================
+     MONOCHROME - Zinc (Obsidian)
+     The core of the theme.
+     ========================================================================== */
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+
+  /* Alias secondary to Zinc */
+  --color-secondary-50: var(--color-zinc-50);
+  --color-secondary-100: var(--color-zinc-100);
+  --color-secondary-200: var(--color-zinc-200);
+  --color-secondary-300: var(--color-zinc-300);
+  --color-secondary-400: var(--color-zinc-400);
+  --color-secondary-500: var(--color-zinc-500);
+  --color-secondary-600: var(--color-zinc-600);
+  --color-secondary-700: var(--color-zinc-700);
+  --color-secondary-800: var(--color-zinc-800);
+  --color-secondary-900: var(--color-zinc-900);
+  --color-secondary-950: var(--color-zinc-950);
+
+  /* ==========================================================================
+     SEMANTIC COLORS (Muted, Professional)
+     ========================================================================== */
+  /* Success - Emerald (Muted) */
+  --color-success-50: #ecfdf5;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+
+  /* Warning - Amber */
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+
+  /* Danger - Red (Sharp) */
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+
+  /* ==========================================================================
+     THEME TOKENS
+     ========================================================================== */
+  --color-background: var(--color-zinc-50);
+  --color-foreground: var(--color-zinc-900);
+
+  /* Surface colors */
+  --color-surface: #ffffff;
+  --color-surface-hover: var(--color-zinc-50);
+  --color-surface-elevated: #ffffff;
+  --color-surface-sunken: var(--color-zinc-100);
+
+  /* Border colors */
+  --color-border: var(--color-zinc-200);
+  --color-border-subtle: var(--color-zinc-100);
+  --color-border-strong: var(--color-zinc-300);
+}
+
+/* ==========================================================================
+   LIGHT MODE
+   ========================================================================== */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #09090b; /* Zinc-950 */
+
+  --surface: #ffffff;
+  --surface-hover: #fafafa; /* Zinc-50 */
+  --surface-elevated: #ffffff;
+  --surface-sunken: #f4f4f5; /* Zinc-100 */
+
+  --border: #e4e4e7; /* Zinc-200 */
+  --border-subtle: #f4f4f5; /* Zinc-100 */
+  --border-strong: #d4d4d8; /* Zinc-300 */
+
+  --muted: #71717a; /* Zinc-500 */
+  --muted-foreground: #a1a1aa; /* Zinc-400 */
+
+  /* Radius tokens - Tighter for Pro look */
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem; /* 8px */
+  --radius-xl: 0.75rem; /* 12px */
+  --radius-2xl: 1rem; /* 16px */
+}
+
+/* ==========================================================================
+   DARK MODE (Obsidian)
+   ========================================================================== */
+.dark {
+  --background: #09090b; /* Zinc-950 - Deepest black */
+  --foreground: #fafafa; /* Zinc-50 */
+
+  --surface: #09090b; /* Match background for seamless look */
+  --surface-hover: #18181b; /* Zinc-900 */
+  --surface-elevated: #18181b; /* Zinc-900 */
+  --surface-sunken: #000000;
+
+  --border: #27272a; /* Zinc-800 - Subtle dark border */
+  --border-subtle: #18181b; /* Zinc-900 */
+  --border-strong: #3f3f46; /* Zinc-700 */
+
+  --muted: #a1a1aa; /* Zinc-400 */
+  --muted-foreground: #71717a; /* Zinc-500 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-sunken: var(--surface-sunken);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ==========================================================================
+   BASE & TYPOGRAPHY
+   ========================================================================== */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tight tracking for headings = Modern Pro look */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.025em; /* tracking-tight */
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+/* Subtle Glass - clearer, less clouded */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dark .glass {
+  background: rgba(9, 9, 11, 0.7); /* Zinc-950 with opacity */
+  border-bottom: 1px solid var(--border);
+}
+
+/* High-end subtle gradient for avatars or accents */
+.gradient-cosmos {
+  background: linear-gradient(180deg, #27272a 0%, #09090b 100%);
+  border: 1px solid #3f3f46;
+}
+
+.dark .gradient-cosmos {
+  background: linear-gradient(180deg, #27272a 0%, #18181b 100%);
+  border: 1px solid #3f3f46;
+}
+
+/* Selection */
+::selection {
+  background: #6366f1; /* Indigo-500 */
+  color: white;
+}
+
+/* Scrollbar - Minimal */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
+  border: 2px solid var(--background); /* Creates padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Scale in animation (for modals) */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Pulse subtle */
+@keyframes pulseSoft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulseSoft 2s ease-in-out infinite;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Focus ring utility */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
 }
