@@ -58,7 +58,7 @@ function UserCard({ user, index, compact = false, isCurrentUser = false }: UserC
         return (
             <Link
                 href={`/users/${user.id}`}
-                className="shrink-0 w-[260px] bg-surface rounded-lg p-4 border border-border group hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors block"
+                className="shrink-0 w-[260px] bg-surface rounded-xl p-4 border border-border group hover:border-border-strong hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300 block"
             >
                 <div className="flex items-center gap-3 mb-3">
                     <div
@@ -104,7 +104,7 @@ function UserCard({ user, index, compact = false, isCurrentUser = false }: UserC
     return (
         <Link
             href={`/users/${user.id}`}
-            className="w-full bg-surface rounded-lg p-5 border border-border group hover:border-zinc-300 dark:hover:border-zinc-700 transition-all block"
+            className="w-full bg-surface rounded-xl p-5 border border-border group hover:border-border-strong hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300 block"
         >
             <div className="flex items-start gap-4 mb-4">
                 <div

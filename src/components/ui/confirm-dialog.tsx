@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Loader2, AlertTriangle, X } from "lucide-react";
 
 interface ConfirmDialogProps {
@@ -26,6 +26,22 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
     const [isLoading, setIsLoading] = useState(false);
 
+    // Close on Escape key
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (e.key === "Escape" && !isLoading) onClose();
+    }, [onClose, isLoading]);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener("keydown", handleKeyDown);
+            document.body.style.overflow = "hidden";
+        }
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+            document.body.style.overflow = "";
+        };
+    }, [isOpen, handleKeyDown]);
+
     if (!isOpen) return null;
 
     const handleConfirm = async () => {
@@ -42,12 +58,12 @@ export function ConfirmDialog({
 
     const variantStyles = {
         danger: {
-            icon: "bg-rose-100 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400",
-            button: "bg-rose-600 hover:bg-rose-700 text-white",
+            icon: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+            button: "bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white shadow-lg shadow-rose-500/25",
         },
         warning: {
-            icon: "bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400",
-            button: "bg-amber-600 hover:bg-amber-700 text-white",
+            icon: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+            button: "bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white shadow-lg shadow-amber-500/25",
         },
         default: {
             icon: "bg-zinc-100 dark:bg-zinc-800 text-foreground",
@@ -58,46 +74,47 @@ export function ConfirmDialog({
     const styles = variantStyles[variant];
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-                onClick={onClose}
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+                onClick={!isLoading ? onClose : undefined}
             />
 
             {/* Dialog */}
-            <div className="relative bg-background rounded-lg border border-border shadow-2xl w-full max-w-md mx-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative bg-surface rounded-2xl border border-border shadow-2xl w-full max-w-sm animate-scale-in">
                 {/* Close button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                    disabled={isLoading}
+                    className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
                 >
                     <X className="w-4 h-4" />
                 </button>
 
                 <div className="p-6">
                     {/* Icon */}
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${styles.icon}`}>
-                        <AlertTriangle className="w-6 h-6" />
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 ${styles.icon}`}>
+                        <AlertTriangle className="w-5 h-5" />
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-lg font-bold text-foreground mb-2">{title}</h3>
-                    <p className="text-sm text-muted-foreground mb-6">{description}</p>
+                    <h3 className="text-base font-bold text-foreground mb-1.5">{title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">{description}</p>
 
                     {/* Actions */}
                     <div className="flex gap-3">
                         <button
                             onClick={onClose}
                             disabled={isLoading}
-                            className="flex-1 h-10 border border-border rounded-lg text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors disabled:opacity-50"
+                            className="flex-1 h-10 border border-border rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-border-strong transition-all disabled:opacity-50"
                         >
                             {cancelText}
                         </button>
                         <button
                             onClick={handleConfirm}
                             disabled={isLoading}
-                            className={`flex-1 h-10 rounded-lg text-sm font-semibold transition-all disabled:opacity-50 flex items-center justify-center gap-2 ${styles.button}`}
+                            className={`flex-1 h-10 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 flex items-center justify-center gap-2 active:scale-[0.97] ${styles.button}`}
                         >
                             {isLoading ? (
                                 <>

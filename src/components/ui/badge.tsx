@@ -4,35 +4,75 @@ interface BadgeProps {
     variant?: "default" | "todo" | "in-progress" | "in-review" | "done" | "low" | "medium" | "high" | "urgent" | "outline" | "secondary";
     children: React.ReactNode;
     className?: string;
+    /** Show a colored dot indicator before the text */
+    dot?: boolean;
 }
 
-const variantStyles = {
-    default: "bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20",
-    secondary: "bg-secondary-50 text-secondary-600 dark:bg-secondary-800 dark:text-secondary-400 border border-secondary-100 dark:border-secondary-700",
-    outline: "border border-border text-foreground bg-transparent",
+const variantStyles: Record<string, { classes: string; dotColor: string }> = {
+    default: {
+        classes: "bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20",
+        dotColor: "bg-brand-500",
+    },
+    secondary: {
+        classes: "bg-zinc-100 dark:bg-zinc-800 text-muted-foreground border border-border",
+        dotColor: "bg-zinc-400",
+    },
+    outline: {
+        classes: "border border-border text-foreground bg-transparent",
+        dotColor: "bg-zinc-400",
+    },
 
-    // Status
-    todo: "bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20",
-    "in-progress": "bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-400 border border-warning-100 dark:border-warning-500/20",
-    "in-review": "bg-secondary-100 text-secondary-600 dark:bg-secondary-800 dark:text-secondary-400 border border-secondary-200 dark:border-secondary-700",
-    done: "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400 border border-success-100 dark:border-success-500/20",
+    // Status variants
+    todo: {
+        classes: "bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20",
+        dotColor: "bg-brand-500",
+    },
+    "in-progress": {
+        classes: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+        dotColor: "bg-amber-500",
+    },
+    "in-review": {
+        classes: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20",
+        dotColor: "bg-violet-500",
+    },
+    done: {
+        classes: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
+        dotColor: "bg-emerald-500",
+    },
 
-    // Priority
-    low: "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400",
-    medium: "bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400",
-    high: "bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-400",
-    urgent: "bg-danger-50 text-danger-600 dark:bg-danger-500/10 dark:text-danger-400",
+    // Priority variants
+    low: {
+        classes: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
+        dotColor: "bg-emerald-500",
+    },
+    medium: {
+        classes: "bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20",
+        dotColor: "bg-brand-500",
+    },
+    high: {
+        classes: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+        dotColor: "bg-amber-500",
+    },
+    urgent: {
+        classes: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20",
+        dotColor: "bg-rose-500",
+    },
 };
 
-export function Badge({ variant = "default", children, className }: BadgeProps) {
+export function Badge({ variant = "default", children, className, dot }: BadgeProps) {
+    const style = variantStyles[variant] || variantStyles.default;
+
     return (
         <span
             className={cn(
-                "inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold transition-colors",
-                variantStyles[variant],
+                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold transition-colors",
+                style.classes,
                 className
             )}
         >
+            {dot && (
+                <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", style.dotColor)} />
+            )}
             {children}
         </span>
     );

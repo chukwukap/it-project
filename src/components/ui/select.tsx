@@ -6,17 +6,18 @@ export interface SelectProps
     extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label?: string;
     error?: string;
+    hint?: string;
     options: { value: string; label: string }[];
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-    ({ className, label, error, options, id, ...props }, ref) => {
+    ({ className, label, error, hint, options, id, ...props }, ref) => {
         const selectId = id || props.name;
 
         return (
             <div className="space-y-1.5 w-full">
                 {label && (
-                    <label htmlFor={selectId} className="block text-sm font-bold text-foreground">
+                    <label htmlFor={selectId} className="block text-sm font-semibold text-foreground">
                         {label}
                     </label>
                 )}
@@ -25,10 +26,11 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                         id={selectId}
                         ref={ref}
                         className={cn(
-                            "w-full px-4 py-2.5 bg-surface-hover border-transparent rounded-xl text-sm transition-all appearance-none outline-none cursor-pointer",
-                            "focus:bg-surface focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10",
+                            "w-full h-10 px-3.5 pr-9 bg-surface border border-border rounded-xl text-sm transition-all duration-200 appearance-none outline-none cursor-pointer",
+                            "hover:border-border-strong",
+                            "focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15",
                             "text-foreground",
-                            error ? "border-danger-500 bg-danger-50/50 dark:bg-danger-500/10" : "",
+                            error && "!border-rose-500 !bg-rose-50/50 dark:!bg-rose-500/5",
                             className
                         )}
                         {...props}
@@ -39,12 +41,15 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                             </option>
                         ))}
                     </select>
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
                         <ChevronDown className="w-4 h-4" />
                     </div>
                 </div>
+                {hint && !error && (
+                    <p className="text-xs text-muted-foreground">{hint}</p>
+                )}
                 {error && (
-                    <p className="text-sm font-medium text-danger-600 dark:text-danger-400">{error}</p>
+                    <p className="text-xs font-medium text-rose-600 dark:text-rose-400">{error}</p>
                 )}
             </div>
         );

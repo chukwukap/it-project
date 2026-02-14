@@ -247,7 +247,7 @@ function ProjectCard({ project }: ProjectCardProps) {
     return (
         <Link
             href={`/projects/${project.id}`}
-            className="group flex flex-col h-full bg-surface rounded-2xl border border-border hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-xl transition-all duration-300 overflow-hidden"
+            className="group flex flex-col h-full bg-surface rounded-2xl border border-border hover:border-border-strong hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300 overflow-hidden"
         >
             {/* Color Header Bar */}
             <div
@@ -342,7 +342,7 @@ function ProjectCard({ project }: ProjectCardProps) {
 function EmptyState({ onCreateProject }: { onCreateProject: () => void }) {
     return (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-brand-100 to-brand-50 dark:from-brand-900/30 dark:to-brand-900/10 rounded-3xl flex items-center justify-center mb-6 shadow-inner">
+            <div className="w-24 h-24 bg-linear-to-br from-brand-100 to-brand-50 dark:from-brand-900/30 dark:to-brand-900/10 rounded-3xl flex items-center justify-center mb-6 shadow-inner">
                 <FolderKanban className="w-12 h-12 text-brand-500" />
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">No projects yet</h2>

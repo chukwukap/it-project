@@ -176,7 +176,7 @@ function TaskCard({ task }: { task: Task }) {
     return (
         <Link
             href={`/tasks/${task.id}`}
-            className="group block bg-surface border border-border rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-lg transition-all duration-200"
+            className="group block bg-surface border border-border rounded-xl p-4 hover:border-border-strong hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300"
         >
             {/* Header: Project + Priority */}
             <div className="flex items-center justify-between mb-3">
@@ -248,7 +248,7 @@ function TaskListItem({ task }: { task: Task }) {
     return (
         <Link
             href={`/tasks/${task.id}`}
-            className="flex items-center gap-4 p-3 bg-surface hover:bg-zinc-50 dark:hover:bg-zinc-900 border border-border hover:border-zinc-300 dark:hover:border-zinc-600 rounded-xl group transition-all"
+            className="flex items-center gap-4 p-3 bg-surface hover:bg-zinc-50 dark:hover:bg-zinc-900/50 border border-border hover:border-border-strong rounded-xl group transition-all duration-200"
         >
             <div className={`p-2 rounded-lg ${config.bg}`}>
                 <StatusIcon className={`w-4 h-4 ${config.color} ${config.animate ? 'animate-spin' : ''}`} />
@@ -297,7 +297,7 @@ function TaskListItem({ task }: { task: Task }) {
 function EmptyState({ onCreateTask, hasFilters }: { onCreateTask: () => void; hasFilters: boolean }) {
     return (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 bg-gradient-to-br from-brand-100 to-brand-50 dark:from-brand-900/30 dark:to-brand-900/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner">
+            <div className="w-20 h-20 bg-linear-to-br from-brand-100 to-brand-50 dark:from-brand-900/30 dark:to-brand-900/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner">
                 <CheckCircle2 className="w-10 h-10 text-brand-500" />
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">

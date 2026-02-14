@@ -121,61 +121,75 @@ export default function DashboardLayout({
             />
             {/* === END BACKGROUND EFFECTS === */}
 
-            {/* Desktop Sidebar - Minimalist & Seamless */}
-            <aside className="hidden lg:flex flex-col w-[240px] fixed left-0 top-0 bottom-0 z-30 backdrop-blur-xl border-r border-border" style={{ background: 'linear-gradient(180deg, var(--background) 0%, var(--surface-hover) 100%)' }}>
+            {/* Desktop Sidebar — Premium with accent indicators */}
+            <aside className="hidden lg:flex flex-col w-[240px] fixed left-0 top-0 bottom-0 z-30 bg-surface/80 backdrop-blur-xl border-r border-border">
                 {/* Logo Area */}
-                <div className="h-14 flex items-center px-6 border-b border-border/50">
-                    <Link href="/" className="flex items-center gap-2.5">
-                        <div className="w-6 h-6 rounded bg-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/20 text-white">
+                <div className="h-14 flex items-center px-5 border-b border-border/50">
+                    <Link href="/" className="flex items-center gap-2.5 group">
+                        <div className="w-7 h-7 rounded-lg bg-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/25 text-white transition-transform group-hover:scale-105">
                             <Command className="w-3.5 h-3.5" />
                         </div>
-                        <span className="font-bold text-sm tracking-tight">Taskify</span>
+                        <span className="font-extrabold text-sm tracking-tight">Taskify</span>
                     </Link>
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 px-3 py-6 space-y-0.5">
-                    <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60">
-                        Workspace
+                <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+                    <div className="px-3 mb-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
+                        Navigation
                     </div>
-                    {navigation.map((item) => (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 text-sm group ${isActive(item.href)
-                                ? "bg-surface-elevated text-foreground shadow-sm ring-1 ring-black/5 dark:ring-white/10"
-                                : "text-muted-foreground hover:bg-surface-hover hover:text-foreground"
-                                }`}
-                        >
-                            <item.icon className={`w-4 h-4 transition-colors ${isActive(item.href) ? 'text-brand-500' : 'text-muted-foreground group-hover:text-foreground'}`} strokeWidth={2} />
-                            <span className="font-medium">{item.name}</span>
-                        </Link>
-                    ))}
+                    {navigation.map((item) => {
+                        const active = isActive(item.href);
+                        return (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={`relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 group ${active
+                                    ? "bg-brand-500/10 text-foreground font-semibold"
+                                    : "text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/50 hover:text-foreground"
+                                    }`}
+                            >
+                                {/* Left accent indicator */}
+                                {active && (
+                                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-brand-500 rounded-full" />
+                                )}
+                                <item.icon
+                                    className={`w-[18px] h-[18px] transition-colors ${active ? 'text-brand-500' : 'text-muted-foreground/70 group-hover:text-foreground'}`}
+                                    strokeWidth={active ? 2.5 : 2}
+                                />
+                                <span>{item.name}</span>
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 {/* User Section */}
                 <div className="p-3 border-t border-border/50">
-                    <div className="flex items-center gap-3 p-2 rounded-md hover:bg-surface-hover transition-colors cursor-pointer group">
-                        <div
-                            className="w-8 h-8 rounded bg-gradient-cosmos flex items-center justify-center text-xs font-bold text-white shadow-inner border border-white/10"
-                        >
-                            {userInitial}
-                        </div>
+                    <Link
+                        href="/settings"
+                        className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all cursor-pointer group"
+                    >
+                        <img
+                            src={session?.user?.image || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=6366f1,8b5cf6&backgroundType=gradientLinear&fontSize=40`}
+                            alt={userName}
+                            className="w-9 h-9 rounded-lg object-cover shadow-md shadow-brand-500/20"
+                        />
                         <div className="flex-1 min-w-0">
-                            <p className="text-xs font-semibold text-foreground truncate group-hover:text-brand-500 transition-colors">
+                            <p className="text-sm font-semibold text-foreground truncate group-hover:text-brand-500 transition-colors">
                                 {userName}
                             </p>
-                            <p className="text-[10px] text-muted-foreground truncate">
-                                Pro Plan
+                            <p className="text-[11px] text-muted-foreground/70 truncate">
+                                {session?.user?.email?.split("@")[0] || "Member"}
                             </p>
                         </div>
                         <button
-                            onClick={handleSignOut}
-                            className="p-1.5 text-muted-foreground hover:text-foreground rounded-md hover:bg-background transition-colors"
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSignOut(); }}
+                            className="p-1.5 text-muted-foreground hover:text-rose-500 rounded-lg hover:bg-rose-500/10 transition-colors"
+                            title="Sign out"
                         >
                             <LogOut className="w-3.5 h-3.5" />
                         </button>
-                    </div>
+                    </Link>
                 </div>
             </aside>
 
