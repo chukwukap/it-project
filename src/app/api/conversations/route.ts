@@ -40,11 +40,11 @@ export const GET = withErrorHandler(async (request) => {
   // Transform to include "other" participant and last message
   const transformed = conversations.map((conv) => {
     const otherParticipant = conv.participants.find(
-      (p) => p.userId !== session.user.id
+      (p) => p.userId !== session.user.id,
     );
     const lastMessage = conv.messages[0];
     const unreadCount = conv.messages.filter(
-      (m) => m.senderId !== session.user.id
+      (m) => m.senderId !== session.user.id,
     ).length;
 
     return {
@@ -75,6 +75,20 @@ export const POST = withErrorHandler(async (request) => {
     throw new Error("Participant ID is required");
   }
 
+  if (participantId === session.user.id) {
+    throw new Error("Cannot create a conversation with yourself");
+  }
+
+  const includeParticipants = {
+    participants: {
+      include: {
+        user: {
+          select: { id: true, name: true, avatar: true },
+        },
+      },
+    },
+  };
+
   // Check if conversation already exists
   const existingConversation = await prisma.conversation.findFirst({
     where: {
@@ -83,38 +97,49 @@ export const POST = withErrorHandler(async (request) => {
         { participants: { some: { userId: participantId } } },
       ],
     },
-    include: {
-      participants: {
-        include: {
-          user: {
-            select: { id: true, name: true, avatar: true },
-          },
-        },
-      },
-    },
+    include: includeParticipants,
   });
 
   if (existingConversation) {
     return successResponse(existingConversation);
   }
 
-  // Create new conversation
-  const conversation = await prisma.conversation.create({
-    data: {
-      participants: {
-        create: [{ userId: session.user.id }, { userId: participantId }],
-      },
-    },
-    include: {
-      participants: {
-        include: {
-          user: {
-            select: { id: true, name: true, avatar: true },
-          },
+  // Create new conversation — handle race condition where another request
+  // may have created the same conversation between our check and create
+  try {
+    const conversation = await prisma.conversation.create({
+      data: {
+        participants: {
+          create: [{ userId: session.user.id }, { userId: participantId }],
         },
       },
-    },
-  });
+      include: includeParticipants,
+    });
 
-  return successResponse(conversation, 201);
+    return successResponse(conversation, 201);
+  } catch (error: unknown) {
+    // P2002 = unique constraint violation — the conversation was created
+    // by a concurrent request between our findFirst and create calls
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "P2002"
+    ) {
+      const retryConversation = await prisma.conversation.findFirst({
+        where: {
+          AND: [
+            { participants: { some: { userId: session.user.id } } },
+            { participants: { some: { userId: participantId } } },
+          ],
+        },
+        include: includeParticipants,
+      });
+
+      if (retryConversation) {
+        return successResponse(retryConversation);
+      }
+    }
+    throw error;
+  }
 });
