@@ -20,11 +20,11 @@ function Toggle({ enabled, onChange }: ToggleProps) {
         <button
             type="button"
             onClick={() => onChange(!enabled)}
-            className={`relative w-10 h-6 rounded-full transition-all duration-300 border border-transparent ${enabled ? 'bg-brand-500' : 'bg-zinc-200 dark:bg-zinc-800'
+            className={`relative w-11 h-6 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:ring-offset-2 focus:ring-offset-surface ${enabled ? 'bg-brand-500 shadow-inner shadow-brand-600/20' : 'bg-zinc-200 dark:bg-zinc-800'
                 }`}
         >
             <span
-                className={`absolute top-0.5 left-0.5 w-4.5 h-4.5 rounded-full bg-white shadow-sm transition-transform duration-300 ${enabled ? 'translate-x-4' : 'translate-x-0'
+                className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${enabled ? 'translate-x-5' : 'translate-x-0'
                     }`}
             />
         </button>
@@ -155,7 +155,7 @@ export default function SettingsPage() {
                     {activeTab === "general" ? (
                         <>
                             {/* Profile Section */}
-                            <section className="bg-surface rounded-lg border border-border p-6 shadow-sm">
+                            <section className="bg-surface rounded-xl border border-border hover:border-border-strong p-6 shadow-sm transition-colors">
                                 <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
                                     <Users className="w-4 h-4 text-brand-500" />
                                     Profile
@@ -168,11 +168,11 @@ export default function SettingsPage() {
                                 ) : (
                                     <div className="space-y-6">
                                         <div className="flex items-center gap-4">
-                                            <div
-                                                className="w-16 h-16 rounded-lg flex items-center justify-center text-xl font-bold text-white shadow-inner bg-gradient-cosmos border border-white/10"
-                                            >
-                                                {user?.name?.charAt(0).toUpperCase() || "U"}
-                                            </div>
+                                            <img
+                                                src={`https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(user?.name || 'User')}&backgroundColor=6366f1,8b5cf6&backgroundType=gradientLinear&fontSize=36`}
+                                                alt={user?.name || 'User'}
+                                                className="w-16 h-16 rounded-xl object-cover shadow-md"
+                                            />
                                             <div>
                                                 <p className="text-base font-bold text-foreground">
                                                     {user?.name || "User"}
@@ -197,7 +197,7 @@ export default function SettingsPage() {
                                             <button
                                                 onClick={handleSaveProfile}
                                                 disabled={isSaving || name === user?.name}
-                                                className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-xs font-bold uppercase tracking-wide"
+                                                className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50 text-xs font-bold uppercase tracking-wide active:scale-[0.97]"
                                             >
                                                 {isSaving && <Loader2 className="w-3 h-3 animate-spin" />}
                                                 {isSaving ? "Saving..." : "Save Changes"}
@@ -208,7 +208,7 @@ export default function SettingsPage() {
                             </section>
 
                             {/* Theme Section */}
-                            <section className="bg-surface rounded-lg border border-border p-6 shadow-sm">
+                            <section className="bg-surface rounded-xl border border-border hover:border-border-strong p-6 shadow-sm transition-colors">
                                 <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
                                     <Monitor className="w-4 h-4 text-brand-500" />
                                     Appearance
@@ -239,7 +239,7 @@ export default function SettingsPage() {
                             </section>
 
                             {/* Regional Settings */}
-                            <section className="bg-surface rounded-lg border border-border p-6 shadow-sm">
+                            <section className="bg-surface rounded-xl border border-border hover:border-border-strong p-6 shadow-sm transition-colors">
                                 <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
                                     <Globe className="w-4 h-4 text-brand-500" />
                                     Region
@@ -271,7 +271,7 @@ export default function SettingsPage() {
                             </section>
 
                             {/* Danger Zone */}
-                            <section className="bg-rose-50 dark:bg-rose-950/10 rounded-lg border border-rose-100 dark:border-rose-900/20 p-6">
+                            <section className="bg-rose-50 dark:bg-rose-950/10 rounded-xl border border-rose-200 dark:border-rose-900/30 p-6">
                                 <h2 className="text-sm font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider mb-2">
                                     Danger Zone
                                 </h2>
@@ -287,7 +287,7 @@ export default function SettingsPage() {
                             </section>
                         </>
                     ) : (
-                        <section className="bg-surface rounded-lg border border-border p-6 shadow-sm">
+                        <section className="bg-surface rounded-xl border border-border hover:border-border-strong p-6 shadow-sm transition-colors">
                             <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
                                 <Bell className="w-4 h-4 text-brand-500" />
                                 Notification Preferences

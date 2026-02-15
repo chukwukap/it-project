@@ -48,13 +48,11 @@ function ChatItem({ conversation, isActive, onClick }: { conversation: Conversat
                 }`}
         >
             <div className="relative shrink-0">
-                <div className="w-10 h-10 rounded-lg bg-linear-to-br from-zinc-400 to-zinc-600 flex items-center justify-center text-white font-bold text-sm">
-                    {participant.avatar ? (
-                        <img src={participant.avatar} alt={participant.name} className="w-full h-full rounded-lg object-cover" />
-                    ) : (
-                        participant.name.charAt(0).toUpperCase()
-                    )}
-                </div>
+                <img
+                    src={participant.avatar || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(participant.name)}&backgroundColor=6366f1,8b5cf6&backgroundType=gradientLinear&fontSize=36`}
+                    alt={participant.name}
+                    className="w-10 h-10 rounded-lg object-cover"
+                />
             </div>
             <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-1">
@@ -142,9 +140,11 @@ function NewConversationModal({ isOpen, onClose, onSelect }: { isOpen: boolean; 
                                 onClick={() => onSelect(user.id)}
                                 className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-left"
                             >
-                                <div className="w-10 h-10 rounded-lg bg-linear-to-br from-zinc-400 to-zinc-600 flex items-center justify-center text-white font-bold text-sm">
-                                    {user.name.charAt(0).toUpperCase()}
-                                </div>
+                                <img
+                                    src={`https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(user.name)}&backgroundColor=6366f1,8b5cf6&backgroundType=gradientLinear&fontSize=36`}
+                                    alt={user.name}
+                                    className="w-10 h-10 rounded-lg object-cover"
+                                />
                                 <div>
                                     <p className="text-sm font-semibold text-foreground">{user.name}</p>
                                     <p className="text-xs text-muted-foreground">{user.email}</p>
@@ -191,9 +191,11 @@ function MobileChatView({ conversation, onBack }: { conversation: Conversation; 
                     <button onClick={onBack} className="p-2 -ml-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg text-foreground transition-colors">
                         <ArrowLeft className="w-5 h-5" />
                     </button>
-                    <div className="w-8 h-8 rounded-lg bg-linear-to-br from-zinc-400 to-zinc-600 flex items-center justify-center text-white font-bold text-xs">
-                        {participant.name.charAt(0).toUpperCase()}
-                    </div>
+                    <img
+                        src={participant.avatar || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(participant.name)}&backgroundColor=6366f1,8b5cf6&backgroundType=gradientLinear&fontSize=36`}
+                        alt={participant.name}
+                        className="w-8 h-8 rounded-lg object-cover"
+                    />
                     <div>
                         <h3 className="text-sm font-bold text-foreground">{participant.name}</h3>
                     </div>
@@ -375,9 +377,11 @@ export default function MessagePage() {
                             {/* Header */}
                             <div className="h-16 px-6 border-b border-border flex items-center justify-between bg-surface shrink-0">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 rounded-lg bg-linear-to-br from-zinc-400 to-zinc-600 flex items-center justify-center text-white font-bold text-sm">
-                                        {activeConversation.participant?.name.charAt(0).toUpperCase()}
-                                    </div>
+                                    <img
+                                        src={activeConversation.participant?.avatar || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(activeConversation.participant?.name || 'U')}&backgroundColor=6366f1,8b5cf6&backgroundType=gradientLinear&fontSize=36`}
+                                        alt={activeConversation.participant?.name || ''}
+                                        className="w-9 h-9 rounded-lg object-cover"
+                                    />
                                     <div>
                                         <h3 className="text-sm font-bold text-foreground">{activeConversation.participant?.name}</h3>
                                     </div>
