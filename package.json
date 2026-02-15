@@ -6,7 +6,7 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "build": "next build",
-    "start": "prisma db push && next start",
+    "start": "next start",
     "lint": "eslint",
     "db:seed": "npx tsx prisma/seed.ts"
   },
